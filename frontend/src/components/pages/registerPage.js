@@ -44,7 +44,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data: res } = await axios.post(url, data);
+      const { response: res } = await axios.post(url, data);
       const {accessToken} = res;
 
       navigate("/login");
