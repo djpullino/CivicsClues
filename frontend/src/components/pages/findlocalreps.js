@@ -62,10 +62,11 @@ const FindLocalReps = () => {
 
   return (
     <>
+     <div className="text-white border-4 border-red-500 min-h-screen p-4 bg-blue-500 text-center">
       <head>
         <title>Representatives / CC</title>
       </head>
-      <div className="flr-container" style={{textAlign: 'center', }}>
+      <div className="flr-container">
         <header>Find Your Local Representatives</header>
         <h1>Please Input a Valid Zip Code</h1>
         <form onSubmit={handleSubmit}> 
@@ -96,6 +97,7 @@ const FindLocalReps = () => {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </>
   );
