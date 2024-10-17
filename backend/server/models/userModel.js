@@ -8,6 +8,11 @@ const newUserSchema = new mongoose.Schema(
       required: true,
       label: "username",
     },
+    party: {
+      type: String,
+      required: true,
+      label: "party",
+    },
     email: {
       type: String,
       required: true,

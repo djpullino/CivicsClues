@@ -20,12 +20,12 @@ export default function Navbar() {
   // we have an issue with getUserInfo() returning null after a few minutes
   // it seems.
   return (
-    <ReactNavbar bg="dark" variant="dark">
+    <ReactNavbar className="border border-white bg-[#301952]">
     <Container>
-      <Nav className="me-auto">
-        <Nav.Link href="/">Start</Nav.Link>
-        <Nav.Link href="/home">Home</Nav.Link>
-        <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+      <Nav className=" text-lg justify-center flex-grow space-x-20">
+        <Nav.Link className="text-white hover:bg-[#5B3B8C]" href="/">Start</Nav.Link>
+        <Nav.Link className="text-white hover:bg-[#5B3B8C]" href="/home">Home</Nav.Link>
+        <Nav.Link className="text-white hover:bg-[#5B3B8C]" href="/findlocalreps">Reps</Nav.Link>
       </Nav>
     </Container>
   </ReactNavbar>

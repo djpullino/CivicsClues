@@ -4,6 +4,7 @@ const z = require('zod')
 const newUserValidation = data => { 
   const registerValidationSchema = z.object({
     username : z.string().min(6, 'Username must be 6 characters or more'),
+    party: z.string().min(1, "Party is required"), 
     email: z.string().email('Please Input a valid email'),
     password: z.string().min(8, 'Password must be 8 or more characters').trim(),
   });
