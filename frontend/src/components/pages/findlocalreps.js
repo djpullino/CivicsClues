@@ -61,9 +61,11 @@ const FindLocalReps = () => {
     <div className="flex h-screen bg-[#301952] text-white">
       <div className="w-1/3 p-6 border-r border-white"> {/* Left Column */}
         <header className="text-center mb-4">
-          <h1 className="text-2xl font-bold">Find Your Local Representatives</h1>
+          <h1 className="text-4xl font-bold">Find Your Local Representatives</h1>
+          <br></br>
           <h2>Please Input a Valid Zip Code</h2>
         </header>
+        <br></br>
         <form onSubmit={handleSubmit} className="text-center">
           <input 
             type="text" 
@@ -89,12 +91,12 @@ const FindLocalReps = () => {
       <div className="flex-grow p-6 overflow-y-auto"> {/* Right Column for API Output */}
         <div className="representatives-list">
           {representatives.length > 0 && representatives.map((rep, index) => (
-            <div key={index} className="mb-4 p-4 border border-white rounded">
-              <h2 className="text-lg font-bold">{rep.name}</h2>
-              <p>{rep.officeTitles}</p> {/* Display office titles */}
-              <p>{rep.party}</p>
-              {rep.phones && <p>Phone: {rep.phones[0]}</p>}
-              {rep.urls && <p><a href={rep.urls[0]} className="text-white ">Website</a></p>}
+            <div key={index} className="mb-4 p-4 border border-white bg-white text-[#301952] rounded">
+              <h2 className="text-3xl font-bold">{rep.name}</h2>
+              <p className="text-2xl">{rep.officeTitles}</p> {/* Display office titles */}
+              <p className="text-xl">{rep.party}</p>
+              {rep.phones && <p className="text-xl">Phone: {rep.phones[0]}</p>}
+              {rep.urls && <p><a href={rep.urls[0]} className="text-xl text-[#301952] ">Website</a></p>}
             </div>
           ))}
         </div>

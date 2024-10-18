@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
   const accessToken = generateAccessToken(user._id, user.email, user.username, user.party)
   res.json({ accessToken });
 
-  res.header('Authorization', accessToken).send({ accessToken: accessToken })
+  
 })
 
 module.exports = router;
