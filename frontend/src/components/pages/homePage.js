@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import getUserInfo from '../../utilities/decodeJwt';
+import CreatePost from '../createPost';
+import Post from '../post';
 
 const HomePage = () => {
     const [user, setUser] = useState({});
+    const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
 
     const handleClick = (e) => {
@@ -16,6 +20,20 @@ const HomePage = () => {
         const userInfo = getUserInfo();
         setUser(userInfo); // Set user info from decoded JWT
     }, []);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`);
+                setPosts(response.data); // Set the fetched posts
+            } catch (error) {
+                console.error("Error fetching posts:", error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
 
     if (!user || !user.username) return (
         <div className="flex justify-center items-center h-screen">
@@ -50,8 +68,22 @@ const HomePage = () => {
                     </button>
                 </div>
             </div>
-            <div className="flex-grow flex justify-center items-center"> {/* Main area, if you need additional content */}
-                {/* Add any additional content here, if needed */}
+            <div className="flex-grow flex flex-col items-center"> {/* Main area for content */}
+                <div className="w-full flex flex-col items-center mb-10"> {/* Full width for CreatePost */}
+                    <CreatePost />
+                </div>
+                {/* Display posts directly below CreatePost */}
+                <div className="w-full flex flex-col items-center"> {/* Add margin for spacing */}
+                    {posts.length === 0 ? (
+                        <div>No posts available.</div>
+                    ) : (
+                        posts.map((post) => (
+                            <div key={post._id} className="mb-10"> {/* Margin bottom for individual posts */}
+                            <Post post={post} />
+                        </div>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );

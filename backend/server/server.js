@@ -8,6 +8,8 @@ const getUserByIdRoute = require('./routes/userGetUserById')
 const dbConnection = require('./config/db.config')
 const editUser = require('./routes/userEditUser')
 const deleteUser = require('./routes/userDeleteAll')
+const postRoutes = require('./routes/post.createPost');
+const getAllPosts = require('./routes/post.getAllPosts')
 
 require('dotenv').config();
 const SERVER_PORT = 8081
@@ -15,6 +17,8 @@ const SERVER_PORT = 8081
 dbConnection()
 app.use(cors({origin: '*'}))
 app.use(express.json())
+app.use('/posts', postRoutes);
+app.use('/posts', getAllPosts)
 app.use('/user', loginRoute)
 app.use('/user', registerRoute)
 app.use('/user', getAllUsersRoute)
