@@ -5,8 +5,8 @@ const FindLocalReps = () => {
   const [representatives, setRepresentatives] = useState([]); // State for representatives
   const [error, setError] = useState(''); // State for error handling
   
-  const API_KEY = 'AIzaSyD6IjloqVqPb-iNrcLNmkBucYGEHA6M4w0'; // Replace with your Google Civics API key
-
+  const API_KEY = process.env.REACT_APP_API_KEY; // Replace with your Google Civics API key
+  console.log(API_KEY);
   // Handle ZIP code input change
   const handleZipCodeChange = (e) => {
     setZipCode(e.target.value);
