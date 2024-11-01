@@ -82,13 +82,13 @@ const HomePage = () => {
                         <div>No posts available.</div>
                     ) : (
                         posts.map((post) => (
-                            <div key={post._id} className="flex-grow flex flex-col items-center overflow-y-auto">
+                            <div key={post._id} className="flex-grow flex flex-col items-center">
                                 <Post post={post} />
                                 {post.username === username && (
                                     <DeletePost 
                                         postId={post._id}
-                                        postUserId={post.username}
-                                        currentUserId={username}
+                                        postUserId={post.username} // Post username
+                                        currentUserId={username} // Current user's username
                                         onDelete={() => handleDeleteConfirmed(post._id)}
                                     />
                                 )}

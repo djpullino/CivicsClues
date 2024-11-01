@@ -13,9 +13,9 @@ const DeletePost = ({ postId, postUserId, currentUserId, onDelete }) => {
     }
     
     try {
-      // Include the currentUserId in the request body for validation on the server side
+      // Send a DELETE request including the postId and username
       await axios.delete(`http://localhost:8081/posts/deletePost`, {
-        data: { postId, userId: currentUserId } // Include userId to verify ownership on the server
+        data: { postId, username: currentUserId } // Use username for verification
       });
       alert('Post deleted successfully');
       onDelete(); // Trigger a callback to refresh the posts list
