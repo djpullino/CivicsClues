@@ -1,67 +1,36 @@
 const express = require("express");
 const router = express.Router();
-const newPostModel = require("../../models/postModel");
-const imageModel = require("../../models/imageModel"); // Import image model
-const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
-const verifyToken = require("../../user-middleware/auth");
+const newPostModel = require('../models/postModel'); // Adjust the path as necessary
+const mongoose = require("mongoose");
 
-// Configure AWS S3 SDK with v3
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
+// Assuming userId is sent in the request headers or body
+router.delete("/deletePost", async (req, res) => {
+  const { postId, userId } = req.body; // Get the post ID and user ID from the request body
 
-// Function to delete the image from S3
-const deleteImageFromS3 = async (imageUri) => {
-  const imageKey = imageUri.split("/").pop(); // Extract the image key from the URI
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME, // Your S3 bucket name
-    Key: imageKey, // Image key (filename)
-  };
-
-  try {
-    const command = new DeleteObjectCommand(params);
-    await s3Client.send(command);
-  } catch (error) {
-    console.error("Error deleting image from S3:", error);
+  // Ensure postId and userId are present
+  if (!postId || !userId) {
+    return res.status(400).json({ error: 'Post ID and user ID are required.' });
   }
-};
-
-router.delete("/posts/deletePost/:postId", verifyToken, async (req, res) => {
-  const { postId } = req.params;
-  const { id } = req.user;
 
   try {
+    // Find the post by ID
     const post = await newPostModel.findById(postId);
 
     if (!post) {
-      return res.status(404).json({ error: "No Post found" });
+      return res.status(404).json({ error: 'Post not found' });
     }
 
-    // Ensure the post belongs to the user
-    if (post.userId.toString() !== id) {
-      return res
-        .status(403)
-        .json({ error: "Unauthorized to delete this post" });
+    // Check if the userId matches the post's userId
+    if (!post.userId.equals(userId)) {
+      return res.status(403).json({ error: 'You are not authorized to delete this post' });
     }
 
-    // If the post has an image, delete it from S3
-    if (post.imageUri) {
-      await deleteImageFromS3(post.imageUri);
-
-      // Also delete the corresponding image document from MongoDB
-      await imageModel.findOneAndDelete({ uri: post.imageUri });
-    }
-
-    // Delete the post from the database
-    await newPostModel.findByIdAndRemove(postId);
-    return res.json({ msg: "Post and associated image deleted successfully" });
+    // Delete the post
+    await post.remove();
+    res.json({ msg: 'Post deleted successfully' });
   } catch (err) {
-    console.error("Error deleting post:", err);
-    res.status(500).json({ error: "Error deleting post" });
+    console.error('Error deleting post:', err);
+    res.status(500).json({ error: 'Could not delete post' });
   }
 });
 

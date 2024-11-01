@@ -9,6 +9,7 @@ const dbConnection = require('./config/db.config')
 const editUser = require('./routes/userEditUser')
 const deleteUser = require('./routes/userDeleteAll')
 const postRoutes = require('./routes/post.createPost');
+const deletePost = require('./routes/post.deletePost');
 const getAllPosts = require('./routes/post.getAllPosts')
 
 require('dotenv').config();
@@ -18,6 +19,7 @@ dbConnection()
 app.use(cors({origin: '*'}))
 app.use(express.json())
 app.use('/posts', postRoutes);
+app.use('/posts', deletePost);
 app.use('/posts', getAllPosts)
 app.use('/user', loginRoute)
 app.use('/user', registerRoute)

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import getUserInfo from '../../utilities/decodeJwt';
 import CreatePost from '../createPost';
+import DeletePost from '../deletePost';
 import Post from '../post';
 
 const HomePage = () => {
@@ -34,6 +35,9 @@ const HomePage = () => {
         fetchPosts();
     }, []);
 
+    const handleDeleteConfirmed = (deletedPostId) => {
+        setPosts(posts.filter(post => post._id !== deletedPostId));
+    };
 
     if (!user || !user.username) return (
         <div className="flex justify-center items-center h-screen">
@@ -41,46 +45,54 @@ const HomePage = () => {
         </div>
     );
 
-    const { email, username, party } = user;
+    const { email, username, party } = user; // Include party information
 
     return (
         <div className="flex h-screen bg-[#301952] text-white">
             <div className="w-1/3 p-6 border-r border-white"> {/* Sidebar */}
                 <h1 className="text-center mb-4">Profile Info</h1>
-                <div className="text-center mb-4"> {/* Center text inside the card */}
+                <div className="text-center mb-4">
                     <h3 className="mb-2">Username:</h3>
                     <p className="username">{username}</p>
                 </div>
-                <div className="text-center mb-4"> {/* Center text inside the card */}
+                <div className="text-center mb-4">
                     <h3 className="mb-2">Your email is:</h3>
                     <p className="email">{email}</p>
                 </div>
-                <div className="text-center mb-4"> {/* Center text inside the card */}
+                <div className="text-center mb-4">
                     <h3 className="mb-2">Your party is:</h3>
                     <p className="party">{party}</p>
                 </div>
                 <div className="text-center">
                     <button
                         className="mt-4 px-4 py-2 bg-[#301952] border border-white text-white rounded-lg shadow hover:bg-[#5B3B8C]"
-                        onClick={(e) => handleClick(e)}
+                        onClick={handleClick}
                     >
                         Log Out
                     </button>
                 </div>
             </div>
-            <div className="flex-grow flex flex-col items-center"> {/* Main area for content */}
+            <div className="flex-grow flex flex-col items-center overflow-y-auto"> {/* Main area for content */}
                 <div className="w-full flex flex-col items-center mb-10"> {/* Full width for CreatePost */}
-                    <CreatePost />
+                    <CreatePost /> 
                 </div>
                 {/* Display posts directly below CreatePost */}
-                <div className="w-full flex flex-col items-center"> {/* Add margin for spacing */}
+                <div className="w-full flex flex-col items-center">
                     {posts.length === 0 ? (
                         <div>No posts available.</div>
                     ) : (
                         posts.map((post) => (
-                            <div key={post._id} className="mb-10"> {/* Margin bottom for individual posts */}
-                            <Post post={post} />
-                        </div>
+                            <div key={post._id} className="flex-grow flex flex-col items-center overflow-y-auto">
+                                <Post post={post} />
+                                {post.username === username && (
+                                    <DeletePost 
+                                        postId={post._id}
+                                        postUserId={post.username}
+                                        currentUserId={username}
+                                        onDelete={() => handleDeleteConfirmed(post._id)}
+                                    />
+                                )}
+                            </div>
                         ))
                     )}
                 </div>
