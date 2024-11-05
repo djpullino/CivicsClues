@@ -11,6 +11,8 @@ const deleteUser = require('./routes/userDeleteAll')
 const postRoutes = require('./routes/post.createPost');
 const deletePost = require('./routes/post.deletePost');
 const getAllPosts = require('./routes/post.getAllPosts')
+const editPost = require('./routes/post.editPost')
+
 
 require('dotenv').config();
 const SERVER_PORT = 8081
@@ -21,6 +23,7 @@ app.use(express.json())
 app.use('/posts', postRoutes);
 app.use('/posts', deletePost);
 app.use('/posts', getAllPosts)
+app.use('/posts', editPost)
 app.use('/user', loginRoute)
 app.use('/user', registerRoute)
 app.use('/user', getAllUsersRoute)

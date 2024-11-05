@@ -5,6 +5,7 @@ import getUserInfo from '../../utilities/decodeJwt';
 import CreatePost from '../createPost';
 import DeletePost from '../deletePost';
 import Post from '../post';
+import EditPost from '../editPost';
 
 const HomePage = () => {
     const [user, setUser] = useState({});
@@ -82,18 +83,23 @@ const HomePage = () => {
                         <div>No posts available.</div>
                     ) : (
                         posts.map((post) => (
-                            <div key={post._id} className="flex-grow flex flex-col items-center">
-                                <Post post={post} />
-                                {post.username === username && (
+                            <div key={post._id} className="flex-grow flex flex-col items-center bg-white rounded shadow-md p-2 mb-4">
+                            <Post post={post} />
+                            {post.username === username && (
+                                <div className="flex space-x-2 mt-2"> {/* Added a small margin on top */}
                                     <DeletePost 
                                         postId={post._id}
                                         postUserId={post.username} // Post username
                                         currentUserId={username} // Current user's username
                                         onDelete={() => handleDeleteConfirmed(post._id)}
                                     />
-                                )}
-                            </div>
+                                    <EditPost />
+                                </div>
+                            )}
+                        </div>
+                        
                         ))
+                        
                     )}
                 </div>
             </div>

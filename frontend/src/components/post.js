@@ -1,28 +1,21 @@
 import React from "react";
-
-
 import moment from "moment";
 
 const Post = ({ post }) => {
   const formattedDate = moment(post.date).format("h:mm A • M/D/YYYY");
 
   return (
-    <div className="post-card">
-      <div className="post-header">
-        <a href={`/profile/${post.username}`} className="post-username">
+    <div className="mb-4 p-4 text-[#301952] max-w-lg">
+      <div className="flex justify-between items-center mb-2">
+        <a href={`/profile/${post.username}`} className="text-lg font-semibold text-[#301952] ">
           @{post.username} - {post.party}
         </a>
-        <span className="post-date">{formattedDate}</span>
+        
       </div>
+      <span className="text-sm text-gray-600">{formattedDate}</span>
 
-      <div className="post-content">
-        <p>{post.content}</p>
-      </div>
-
-      <div className="post-actions">
-        <button>
-          <span> Comment</span>
-        </button>
+      <div className="post-content mb-4">
+        <p className="text-lg break-words">{post.content}</p>
       </div>
     </div>
   );
