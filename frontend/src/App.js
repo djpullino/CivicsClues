@@ -1,5 +1,4 @@
-import React from "react";
-// We use Route in order to define the different routes of our application
+import React, { useState, useEffect, createContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import './css/card.css';
 
@@ -10,13 +9,17 @@ import HomePage from "./components/pages/homePage";
 import Login from "./components/pages/loginPage";
 import Signup from "./components/pages/registerPage";
 import FindLocalReps from  "./components/pages/findlocalreps";
+import CommentPage from "./components/pages/commentPage";
 
-import { createContext, useState, useEffect } from "react";
+// Import the ElectoralMap component
+import ElectoralMap from "./components/pages/electoralMap";
+
+// Import the getUserInfo function
 import getUserInfo from "./utilities/decodeJwt";
 
+// Create the UserContext to provide user info globally
 export const UserContext = createContext();
-//test change
-//test again
+
 const App = () => {
   const [user, setUser] = useState();
 
@@ -32,14 +35,14 @@ const App = () => {
           <Route exact path="/" element={<LandingPage />} />
           <Route exact path="/home" element={<HomePage />} />
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/electoral" element={<ElectoralMap />} /> {/* Embed the ElectoralMap component */}
           <Route exact path="/signup" element={<Signup />} />
           <Route path="/findlocalreps" element={<FindLocalReps />} />
+          <Route path="/comments/:postId" element={<CommentPage />} />
         </Routes>
       </UserContext.Provider>
     </>
   );
 };
 
-
-
-export default App
+export default App;

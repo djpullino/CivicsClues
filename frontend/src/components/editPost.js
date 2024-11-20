@@ -1,21 +1,21 @@
 import React from "react";
 import axios from "axios";
 
-const EditPostButton = ({ postId, initialContent, userId, onUpdate }) => {
+const EditPostButton = ({ postId, initialContent, username, onUpdate }) => { // Use `username` instead of `userId`
   const handleEdit = async () => {
-    // Prompt user to enter new content
     const newContent = window.prompt("Edit your post:", initialContent);
-    
-    // Check if the user entered something
+
     if (newContent && newContent !== initialContent) {
       try {
-        const response = await axios.post("http://localhost:8081/posts/editPost", { // Ensure the path matches your backend
+        console.log("Sending edit request with:", { postId, content: newContent, username });
+        const response = await axios.post("http://localhost:8081/posts/editPost", {
           postId,
           content: newContent,
-          userId,
+          username, // Use `username` in the request
         });
 
-        // Call onUpdate to refresh the data in the parent component
+        console.log("Edit response:", response.data);
+
         if (onUpdate) {
           onUpdate(response.data);
         }
@@ -25,8 +25,16 @@ const EditPostButton = ({ postId, initialContent, userId, onUpdate }) => {
       }
     }
   };
+  
 
-  return <button className = "px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#431c6b]" onClick={handleEdit}>Edit</button>;
+  return (
+    <button
+      className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#431c6b]"
+      onClick={handleEdit}
+    >
+      Edit
+    </button>
+  );
 };
 
 export default EditPostButton;

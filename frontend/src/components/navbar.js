@@ -26,6 +26,7 @@ export default function Navbar() {
         <Nav.Link className="!text-[#301952] hover:bg-[#EDEADE]" href="/">Start</Nav.Link>
         <Nav.Link className="!text-[#301952] hover:bg-[#EDEADE]" href="/home">Home</Nav.Link>
         <Nav.Link className="!text-[#301952] hover:bg-[#EDEADE]" href="/findlocalreps">Reps</Nav.Link>
+        <Nav.Link className="!text-[#301952] hover:bg-[#EDEADE]" href="/electoral">Map</Nav.Link>
       </Nav>
     </Container>
   </ReactNavbar>

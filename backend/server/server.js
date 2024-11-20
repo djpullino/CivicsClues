@@ -7,11 +7,14 @@ const registerRoute = require('./routes/userSignUp')
 const getUserByIdRoute = require('./routes/userGetUserById')
 const dbConnection = require('./config/db.config')
 const editUser = require('./routes/userEditUser')
+
 const deleteUser = require('./routes/userDeleteAll')
 const postRoutes = require('./routes/post.createPost');
 const deletePost = require('./routes/post.deletePost');
 const getAllPosts = require('./routes/post.getAllPosts')
 const editPost = require('./routes/post.editPost')
+
+const createComment = require('./routes/createComment');
 
 
 require('dotenv').config();
@@ -22,14 +25,15 @@ app.use(cors({origin: '*'}))
 app.use(express.json())
 app.use('/posts', postRoutes);
 app.use('/posts', deletePost);
-app.use('/posts', getAllPosts)
-app.use('/posts', editPost)
-app.use('/user', loginRoute)
-app.use('/user', registerRoute)
-app.use('/user', getAllUsersRoute)
-app.use('/user', getUserByIdRoute)
-app.use('/user', editUser)
-app.use('/user', deleteUser)
+app.use('/posts', getAllPosts);
+app.use('/posts', editPost);
+app.use('/user', loginRoute);
+app.use('/user', registerRoute);
+app.use('/user', getAllUsersRoute);
+app.use('/user', getUserByIdRoute);
+app.use('/user', editUser);
+app.use('/user', deleteUser);
+app.use('/comments', createComment);   
 
 app.listen(SERVER_PORT, (req, res) => {
     console.log(`The backend service is running on port ${SERVER_PORT} and waiting for requests.`);

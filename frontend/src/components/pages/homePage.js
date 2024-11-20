@@ -6,6 +6,8 @@ import CreatePost from '../createPost';
 import DeletePost from '../deletePost';
 import Post from '../post';
 import EditPost from '../editPost';
+import CreateComment from '../createComment'; // Import CreateComment
+import Comment from '../comment'; // Assuming you have a Comment component to display comments
 
 const HomePage = () => {
     const [user, setUser] = useState({});
@@ -38,6 +40,36 @@ const HomePage = () => {
 
     const handleDeleteConfirmed = (deletedPostId) => {
         setPosts(posts.filter(post => post._id !== deletedPostId));
+    };
+
+    const handleUpdatePost = (updatedPost) => {
+        setPosts(posts.map(post => 
+            post._id === updatedPost._id ? updatedPost : post
+        ));
+    };
+
+    const handleCommentSubmit = (postId, comment) => {
+        axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/${postId}/comments`, {
+            username: user.username,
+            comment: comment,
+        })
+        .then(response => {
+            // Update the post with the new comment
+            setPosts(posts.map(post => 
+                post._id === postId ? { ...post, comments: [...post.comments, response.data] } : post
+            ));
+        })
+        .catch(error => {
+            console.error("Error adding comment:", error);
+        });
+    };
+
+    const handlePostCreated = () => {
+        // Re-fetch posts after a new post is created
+        console.log('Post created! Refreshing posts...');
+        axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`)
+            .then(response => setPosts(response.data))
+            .catch(error => console.error("Error fetching posts:", error));
     };
 
     if (!user || !user.username) return (
@@ -75,7 +107,7 @@ const HomePage = () => {
             </div>
             <div className="flex-grow flex flex-col items-center overflow-y-auto"> {/* Main area for content */}
                 <div className="w-full flex flex-col items-center mb-10"> {/* Full width for CreatePost */}
-                    <CreatePost /> 
+                    <CreatePost onPostCreated={handlePostCreated} /> 
                 </div>
                 {/* Display posts directly below CreatePost */}
                 <div className="w-full flex flex-col items-center">
@@ -84,22 +116,38 @@ const HomePage = () => {
                     ) : (
                         posts.map((post) => (
                             <div key={post._id} className="flex-grow flex flex-col items-center bg-white rounded shadow-md p-2 mb-4">
-                            <Post post={post} />
-                            {post.username === username && (
-                                <div className="flex space-x-2 mt-2"> {/* Added a small margin on top */}
-                                    <DeletePost 
-                                        postId={post._id}
-                                        postUserId={post.username} // Post username
-                                        currentUserId={username} // Current user's username
-                                        onDelete={() => handleDeleteConfirmed(post._id)}
-                                    />
-                                    <EditPost />
+                                <Post post={post} />
+                                
+                                {/* Comment section */}
+                                <div className="w-full">
+                                    <h3 className="text-center mb-2">Comments</h3>
+                                    {post.comments && post.comments.length > 0 ? (
+                                        post.comments.map((comment, index) => (
+                                            <Comment key={index} comment={comment} />
+                                        ))
+                                    ) : (
+                                        <div>No comments yet.</div>
+                                    )}
+                                    <CreateComment onSubmit={(comment) => handleCommentSubmit(post._id, comment)} />
                                 </div>
-                            )}
-                        </div>
-                        
+
+                                {post.username === username && (
+                                    <div className="flex space-x-2 mt-2"> {/* Added a small margin on top */}
+                                        <DeletePost 
+                                            postId={post._id}
+                                            postUserId={post.username} // Post username
+                                            currentUserId={username} // Current user's username
+                                            onDelete={() => handleDeleteConfirmed(post._id)}
+                                        />
+                                        <EditPost 
+                                            postId={post._id}
+                                            username={post.username}
+                                            onUpdate={handleUpdatePost}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         ))
-                        
                     )}
                 </div>
             </div>

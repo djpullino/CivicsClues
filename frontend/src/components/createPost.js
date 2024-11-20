@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import getUserInfo from '../utilities/decodeJwt';
 
-const CreatePost = () => {
+const CreatePost = ({ onPostCreated }) => {
     const [postContent, setPostContent] = useState('');
     const [user, setUser] = useState({});
 
@@ -58,8 +58,11 @@ const CreatePost = () => {
             );
 
             if (response.status === 200) {
+            
                 setPostContent(''); // Clear the text area after successful post creation
                 alert("Post created successfully.");
+                onPostCreated();
+
             }
         } catch (error) {
             console.error("Error creating post:", error.response?.data || error.message);
