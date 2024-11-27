@@ -1,46 +1,39 @@
 const express = require("express");
+const bcrypt = require("bcrypt");  // Import bcrypt to hash passwords
 const router = express.Router();
-const z = require('zod')
-const bcrypt = require("bcrypt");
-const newUserModel = require('../models/userModel')
-const { newUserValidation } = require('../models/userValidator');
-const { generateAccessToken } = require('../utilities/generateToken');
+const newUserModel = require('../models/userModel');  // Ensure this points to your User model
 
-router.post('/editUser', async (req, res) =>
-{
-    // validate new user information
-    const { error } = newUserValidation(req.body);
-    if (error) return res.status(400).send({ message: error.errors[0].message });
+// PUT route to edit user
+router.put('/editUser/:userId', async (req, res) => {
+  const { userId } = req.params;  // Get userId from URL parameter
+  const { username, email, party, password } = req.body;  // Get data from request body
+  
+  try {
+    const user = await newUserModel.findById(userId);  // Find the user by ID
 
-    // store new user information
-    const {userId, username, email, password} = req.body
-
-    // check if username is available
-    const user = await newUserModel.findOne({ username: username })
-    if (user) userIdReg = JSON.stringify(user._id).replace(/["]+/g, '')
-    if (user && userIdReg !== userId) return res.status(409).send({ message: "Username is taken, pick another" })
-
-    // generates the hash
-    const generateHash = await bcrypt.genSalt(Number(10))
-
-    // parse the generated hash into the password
-    const hashPassword = await bcrypt.hash(password, generateHash)
-
-    // find and update user using stored information
-    newUserModel.findByIdAndUpdate(userId, {
-        username : username, 
-        email : email, 
-        password : hashPassword
-    } ,function (err, user) {
-    if (err){
-        console.log(err);
-    } else {
-        // create and send new access token to local storage
-        const accessToken = generateAccessToken(user._id, email, username, hashPassword)  
-        res.header('Authorization', accessToken).send({ accessToken: accessToken })
+    if (!user) {
+      return res.status(404).send("User not found.");
     }
-    });
 
-})
+    // Update user fields
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (party) user.party = party;
 
-module.exports = router;
+    // Only update password if it's provided
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);  // Hash the new password
+      user.password = hashedPassword;
+    }
+
+    // Save the updated user
+    await user.save();
+
+    return res.json(user);  // Return updated user data
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Error updating user.");
+  }
+});
+
+module.exports = router;  // Export the router for use in server.js

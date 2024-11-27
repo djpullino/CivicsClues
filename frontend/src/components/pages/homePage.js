@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import getUserInfo from '../../utilities/decodeJwt';
+import getUserInfo from '../../utilities/decodeJwt'; // Ensure this decodes correctly
 import CreatePost from '../createPost';
 import DeletePost from '../deletePost';
 import Post from '../post';
 import EditPost from '../editPost';
-import CreateComment from '../createComment'; // Import CreateComment
-import Comment from '../comment'; // Assuming you have a Comment component to display comments
+import CreateComment from '../createComment';
+import Comment from '../comment';
 
 const HomePage = () => {
     const [user, setUser] = useState({});
@@ -21,7 +21,8 @@ const HomePage = () => {
     };
 
     useEffect(() => {
-        const userInfo = getUserInfo();
+        const userInfo = getUserInfo(); // Decode the JWT
+        console.log('Decoded User Info:', userInfo); // Log to see if 'id' is correctly decoded
         setUser(userInfo); // Set user info from decoded JWT
     }, []);
 
@@ -54,7 +55,6 @@ const HomePage = () => {
             comment: comment,
         })
         .then(response => {
-            // Update the post with the new comment
             setPosts(posts.map(post => 
                 post._id === postId ? { ...post, comments: [...post.comments, response.data] } : post
             ));
@@ -65,7 +65,6 @@ const HomePage = () => {
     };
 
     const handlePostCreated = () => {
-        // Re-fetch posts after a new post is created
         console.log('Post created! Refreshing posts...');
         axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`)
             .then(response => setPosts(response.data))
@@ -78,7 +77,7 @@ const HomePage = () => {
         </div>
     );
 
-    const { email, username, party } = user; // Include party information
+    const { id, username, party } = user; // Use 'id' instead of '_id' here
 
     return (
         <div className="flex h-screen bg-[#301952] text-white">
@@ -90,7 +89,7 @@ const HomePage = () => {
                 </div>
                 <div className="text-center mb-4">
                     <h3 className="mb-2">Your email is:</h3>
-                    <p className="email">{email}</p>
+                    <p className="email">{user.email}</p>
                 </div>
                 <div className="text-center mb-4">
                     <h3 className="mb-2">Your party is:</h3>
@@ -104,12 +103,19 @@ const HomePage = () => {
                         Log Out
                     </button>
                 </div>
+                <div className="text-center mb-4">
+                    <button
+                         className="mt-4 px-4 py-2 bg-[#5B3B8C] text-white rounded-lg shadow hover:bg-[#301952]"
+                         onClick={() => navigate(`/editUser/${id}`)} // Use 'id' instead of '_id'
+                     >
+                            Edit Party
+                     </button>
+                </div>
             </div>
             <div className="flex-grow flex flex-col items-center overflow-y-auto"> {/* Main area for content */}
                 <div className="w-full flex flex-col items-center mb-10"> {/* Full width for CreatePost */}
-                    <CreatePost onPostCreated={handlePostCreated} /> 
+                    <CreatePost onPostCreated={handlePostCreated} />
                 </div>
-                {/* Display posts directly below CreatePost */}
                 <div className="w-full flex flex-col items-center">
                     {posts.length === 0 ? (
                         <div>No posts available.</div>
