@@ -9,7 +9,7 @@ import HomePage from "./components/pages/homePage";
 import Login from "./components/pages/loginPage";
 import Signup from "./components/pages/registerPage";
 import FindLocalReps from  "./components/pages/findlocalreps";
-import CommentPage from "./components/pages/commentPage";
+import CommentList from './components/commentList';
 import EditUser from "./components/editUser";
 
 // Import the ElectoralMap component
@@ -39,7 +39,7 @@ const App = () => {
           <Route exact path="/electoral" element={<ElectoralMap />} /> {/* Embed the ElectoralMap component */}
           <Route exact path="/signup" element={<Signup />} />
           <Route path="/findlocalreps" element={<FindLocalReps />} />
-          <Route path="/comments/:postId" element={<CommentPage />} />
+          <Route path="/commentList/:postId" element={<CommentList />} />
           <Route exact path="/editUser/:userId" element={<EditUser />} />
         </Routes>
       </UserContext.Provider>

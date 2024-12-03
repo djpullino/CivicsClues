@@ -6,16 +6,14 @@ import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 
 const Comment = (props) => {
-  const comment = props.record;
-  const deleteComment = async (comment) => {
-    axios
-      .delete(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/${comment._id}`
-      )
-      .then((response) => {
-        alert("Comment deleted.");
-      })
-      .catch((error) => alert("Error deleting comment"));
+  const { comment, deleteComment, handleEditComment } = props;
+  
+  const handleDelete = () => {
+    deleteComment(comment._id); // Call the delete function passed as a prop
+  };
+
+  const handleEdit = () => {
+    handleEditComment(comment._id); // Redirect to edit page using the passed function
   };
 
   return (
@@ -37,7 +35,7 @@ const Comment = (props) => {
               style={{
                 resize: "none",
                 whiteSpace: "pre-line",
-                overflowWrap: "break-word", // Add this line
+                overflowWrap: "break-word",
               }}
             />
           </div>
@@ -45,7 +43,7 @@ const Comment = (props) => {
             <Button
               variant="primary"
               className="mx-1 my-1"
-              href={`/comments/editComment/${comment._id}`}
+              onClick={handleEdit} // Trigger edit action
             >
               Edit
             </Button>
@@ -53,7 +51,7 @@ const Comment = (props) => {
             <Button
               variant="primary"
               className="mx-1 my-1"
-              onClick={() => deleteComment(comment)}
+              onClick={handleDelete} // Trigger delete action
             >
               Delete
             </Button>

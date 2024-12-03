@@ -6,8 +6,8 @@ import CreatePost from '../createPost';
 import DeletePost from '../deletePost';
 import Post from '../post';
 import EditPost from '../editPost';
-import CreateComment from '../createComment';
 import Comment from '../comment';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
     const [user, setUser] = useState({});
@@ -47,21 +47,6 @@ const HomePage = () => {
         setPosts(posts.map(post => 
             post._id === updatedPost._id ? updatedPost : post
         ));
-    };
-
-    const handleCommentSubmit = (postId, comment) => {
-        axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/${postId}/comments`, {
-            username: user.username,
-            comment: comment,
-        })
-        .then(response => {
-            setPosts(posts.map(post => 
-                post._id === postId ? { ...post, comments: [...post.comments, response.data] } : post
-            ));
-        })
-        .catch(error => {
-            console.error("Error adding comment:", error);
-        });
     };
 
     const handlePostCreated = () => {
@@ -105,7 +90,7 @@ const HomePage = () => {
                 </div>
                 <div className="text-center mb-4">
                     <button
-                         className="mt-4 px-4 py-2 bg-[#5B3B8C] text-white rounded-lg shadow hover:bg-[#301952]"
+                         className="mt-4 px-4 py-2 bg-[#301952] border border-white text-white rounded-lg shadow hover:bg-[#5B3B8C]"
                          onClick={() => navigate(`/editUser/${id}`)} // Use 'id' instead of '_id'
                      >
                             Edit Party
@@ -125,16 +110,12 @@ const HomePage = () => {
                                 <Post post={post} />
                                 
                                 {/* Comment section */}
-                                <div className="w-full">
-                                    <h3 className="text-center mb-2">Comments</h3>
-                                    {post.comments && post.comments.length > 0 ? (
-                                        post.comments.map((comment, index) => (
-                                            <Comment key={index} comment={comment} />
-                                        ))
-                                    ) : (
-                                        <div>No comments yet.</div>
-                                    )}
-                                    <CreateComment onSubmit={(comment) => handleCommentSubmit(post._id, comment)} />
+                                <div>
+                        
+                                <Link to={`/commentList/${post._id}`} className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#431c6b] no-underline">
+                                    View Comments
+                                </Link>
+
                                 </div>
 
                                 {post.username === username && (

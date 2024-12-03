@@ -57,33 +57,40 @@ const EditUser = () => {
   };
 
   if (loading) {
-    return <div>Loading user data...</div>;
+    return <div className="flex justify-center items-center h-screen bg-[#301952] text-[#5B3B8C]">Loading user data...</div>;
   }
 
   return (
-    <div className="edit-user-container">
-      <h2>Edit User Party</h2>
-      <div>
-        <label htmlFor="party-select">Select Party:</label>
-        <select
-          id="party-select"
-          value={user.party}
-          onChange={handlePartyChange}
-          className="party-dropdown"
-        >
-          <option value="" disabled>
-            -- Select a Party --
-          </option>
-          {partyOptions.map((party) => (
-            <option key={party} value={party}>
-              {party}
+    <div className="flex justify-center items-center h-screen bg-[#301952] text-[#301952]">
+      <div className="bg-white text-center p-6 rounded-lg shadow-lg max-w-md w-full">
+        <h2 className="text-2xl mb-6">Edit User Party</h2>
+        <div className="mb-4">
+          <label htmlFor="party-select" className="block text-xl mb-2">
+            Select Party:
+          </label>
+          <select
+            id="party-select"
+            value={user.party}
+            onChange={handlePartyChange}
+            className="party-dropdown p-2 rounded-md w-full border border-[#301952] focus:outline-none"
+          >
+            <option value="" disabled>
+              -- Select a Party --
             </option>
-          ))}
-        </select>
+            {partyOptions.map((party) => (
+              <option key={party} value={party}>
+                {party}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          onClick={() => navigate("/home")}
+          className="mt-4 px-4 py-2 bg-[#301952] text-white rounded-lg hover:bg-[#431c6b]"
+        >
+          Back to Home
+        </button>
       </div>
-      <button onClick={() => navigate("/home")} className="back-button">
-        Back to Home
-      </button>
     </div>
   );
 };

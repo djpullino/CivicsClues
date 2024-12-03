@@ -66,29 +66,30 @@ commentRoutes.post("/comment/add", async (req, res) => {
   }
 });
 
-// Update a comment by username
-commentRoutes.put("/comment/update/:username", async (req, res) => {
+// Update a comment by id
+commentRoutes.put("/comment/update/:id", async (req, res) => {
   try {
-    const updatedComment = await comment.findOneAndUpdate(
-      { username: req.params.username },
-      req.body,
-      { new: true }
+    const updatedComment = await comment.findByIdAndUpdate(
+      req.params.id, // Use req.params.id to find the comment by ID
+      req.body, // The updated data to save
+      { new: true } // Return the updated comment
     );
-    if (!updatedComment) return res.status(404).json({ error: "No comment found for this username" });
+    if (!updatedComment) return res.status(404).json({ error: "No comment found for this ID" });
     res.json({ msg: "Updated successfully", updatedComment });
   } catch (err) {
     res.status(400).json({ error: "Unable to update the Database" });
   }
 });
 
-// Delete a comment by username
-commentRoutes.delete("/comment/:username", async (req, res) => {
+
+// Delete a comment by id
+commentRoutes.delete("/comment/:id", async (req, res) => {
   try {
-    const deletedComment = await comment.findOneAndRemove({ username: req.params.username });
-    if (!deletedComment) return res.status(404).json({ error: "No comment found for this username" });
+    const deletedComment = await comment.findByIdAndRemove(req.params.id); // Use req.params.id to find the comment
+    if (!deletedComment) return res.status(404).json({ error: "No comment found" });
     res.json({ msg: "Comment deleted successfully" });
   } catch (err) {
-    res.status(404).json({ error: "No comment found" });
+    res.status(500).json({ error: "Failed to delete comment" });
   }
 });
 

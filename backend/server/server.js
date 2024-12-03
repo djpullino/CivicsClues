@@ -13,6 +13,7 @@ const postRoutes = require('./routes/post.createPost');
 const deletePost = require('./routes/post.deletePost');
 const getAllPosts = require('./routes/post.getAllPosts')
 const editPost = require('./routes/post.editPost')
+const getPostById = require('./routes/post.getPostById');
 
 const createComment = require('./routes/createComment');
 
@@ -26,6 +27,7 @@ app.use(express.json())
 app.use('/posts', postRoutes);
 app.use('/posts', deletePost);
 app.use('/posts', getAllPosts);
+app.use('/posts', getPostById);
 app.use('/posts', editPost);
 app.use('/user', loginRoute);
 app.use('/user', registerRoute);
