@@ -11,6 +11,7 @@ import Signup from "./components/pages/registerPage";
 import FindLocalReps from  "./components/pages/findlocalreps";
 import CommentList from './components/commentList';
 import EditUser from "./components/editUser";
+import AdminUserList from './components/adminUserList';
 
 // Import the ElectoralMap component
 import ElectoralMap from "./components/pages/electoralMap";
@@ -28,6 +29,8 @@ const App = () => {
     setUser(getUserInfo());
   }, []);
 
+  const isAdmin = user && user.isAdmin;
+
   return (
     <>
       <Navbar />
@@ -41,6 +44,7 @@ const App = () => {
           <Route path="/findlocalreps" element={<FindLocalReps />} />
           <Route path="/commentList/:postId" element={<CommentList />} />
           <Route exact path="/editUser/:userId" element={<EditUser />} />
+          <Route path="/admin/users" element={isAdmin ? <AdminUserList /> : <div>You are not authorized to access this page.</div>} />
         </Routes>
       </UserContext.Provider>
     </>

@@ -23,6 +23,11 @@ const newUserSchema = new mongoose.Schema(
       type: String,
       min : 8
     },
+
+    isAdmin: {
+      type: Boolean,
+      default: false,
+   },
     date: {
       type: Date,
       default: Date.now,

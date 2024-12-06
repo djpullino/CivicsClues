@@ -12,7 +12,7 @@ router.post('/login', async (req, res) => {
   const { error } = userLoginValidation(req.body);
   if (error) return res.status(400).send({ message: error.errors[0].message });
 
-  const { username, password } = req.body
+  const { username, password } = req.body;
 
   const user = await newUserModel.findOne({ username: username });
 
@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
   if (!user)
     return res
       .status(401)
-      .send({ message: "email or password does not exists, try again" });
+      .send({ message: "email or password does not exist, try again" });
 
   //check if the password is correct or not
   const checkPasswordValidity = await bcrypt.compare(
@@ -31,13 +31,11 @@ router.post('/login', async (req, res) => {
   if (!checkPasswordValidity)
     return res
       .status(401)
-      .send({ message: "email or password does not exists, try again" });
+      .send({ message: "email or password does not exist, try again" });
 
-  //create json web token if authenticated and send it back to client in header where it is stored in localStorage ( might not be best practice )
-  const accessToken = generateAccessToken(user._id, user.email, user.username, user.party)
+  //create JSON Web Token if authenticated and include isAdmin in the payload
+  const accessToken = generateAccessToken(user._id, user.email, user.username, user.party, user.isAdmin);
   res.json({ accessToken });
-
-  
-})
+});
 
 module.exports = router;

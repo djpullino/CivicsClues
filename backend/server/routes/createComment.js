@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const commentRoutes = express.Router();
 const comment = require("../models/commentModel");
 const mongoose = require("mongoose");
@@ -82,14 +83,33 @@ commentRoutes.put("/comment/update/:id", async (req, res) => {
 });
 
 
-// Delete a comment by id
 commentRoutes.delete("/comment/:id", async (req, res) => {
+  const token = req.header("Authorization")?.replace("Bearer ", ""); // Extract token from headers
+
+  if (!token) {
+    return res.status(401).json({ error: "Authorization token is required." });
+  }
+
   try {
-    const deletedComment = await comment.findByIdAndRemove(req.params.id); // Use req.params.id to find the comment
-    if (!deletedComment) return res.status(404).json({ error: "No comment found" });
-    res.json({ msg: "Comment deleted successfully" });
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // Decode the token using the correct secret
+    const isAdmin = decoded.isAdmin;
+    const currentUser = decoded.username;
+
+    const comment = await Comment.findById(req.params.id);
+
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found." });
+    }
+
+    if (isAdmin || comment.userId === currentUser) {
+      await comment.remove();
+      return res.json({ msg: "Comment deleted successfully." });
+    }
+
+    return res.status(403).json({ error: "You are not authorized to delete this comment." });
   } catch (err) {
-    res.status(500).json({ error: "Failed to delete comment" });
+    console.error("Error deleting comment:", err);
+    return res.status(500).json({ error: "Failed to delete comment." });
   }
 });
 

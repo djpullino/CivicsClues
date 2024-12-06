@@ -88,6 +88,7 @@ const HomePage = () => {
                         Log Out
                     </button>
                 </div>
+
                 <div className="text-center mb-4">
                     <button
                          className="mt-4 px-4 py-2 bg-[#301952] border border-white text-white rounded-lg shadow hover:bg-[#5B3B8C]"
@@ -96,6 +97,19 @@ const HomePage = () => {
                             Edit Party
                      </button>
                 </div>
+
+                {/* Admin-only button */}
+                {user.isAdmin && (
+                    <div className="text-center mt-4">
+                        <button
+                            className="px-4 py-2 bg-[#301952] border border-white text-white rounded-lg shadow hover:bg-[#5B3B8C]"
+                            onClick={() => navigate('/admin/users')} // Navigate to the admin user list
+                        >
+                            Manage Users (Admin Only)
+                        </button>
+                    </div>
+                )}
+                
             </div>
             <div className="flex-grow flex flex-col items-center overflow-y-auto"> {/* Main area for content */}
                 <div className="w-full flex flex-col items-center mb-10"> {/* Full width for CreatePost */}
@@ -111,28 +125,30 @@ const HomePage = () => {
                                 
                                 {/* Comment section */}
                                 <div>
-                        
-                                <Link to={`/commentList/${post._id}`} className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#431c6b] no-underline">
-                                    View Comments
-                                </Link>
-
+                                    <Link to={`/commentList/${post._id}`} className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#431c6b] no-underline">
+                                        View Comments
+                                    </Link>
                                 </div>
 
-                                {post.username === username && (
-                                    <div className="flex space-x-2 mt-2"> {/* Added a small margin on top */}
-                                        <DeletePost 
-                                            postId={post._id}
-                                            postUserId={post.username} // Post username
-                                            currentUserId={username} // Current user's username
-                                            onDelete={() => handleDeleteConfirmed(post._id)}
-                                        />
+                                {(post.username === username || user.isAdmin) && (
+                                <div className="flex space-x-2 mt-2"> {/* Added a small margin on top */}
+                                    <DeletePost 
+                                        postId={post._id}
+                                        postUserId={post.username} // Post username
+                                        currentUserId={username} // Current user's username
+                                        isAdmin={user.isAdmin} // Pass admin status
+                                        onDelete={() => handleDeleteConfirmed(post._id)}
+                                    />
+                                    {post.username === username && ( // Only show Edit button if the user is the author
                                         <EditPost 
                                             postId={post._id}
                                             username={post.username}
                                             onUpdate={handleUpdatePost}
                                         />
-                                    </div>
-                                )}
+                                    )}
+                                </div>
+                            )}
+
                             </div>
                         ))
                     )}

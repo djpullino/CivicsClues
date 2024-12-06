@@ -14,6 +14,7 @@ const refreshAccessToken = async (decodedAccessToken) => {
         email: decodedAccessToken.email,
         username: decodedAccessToken.username,
         party: decodedAccessToken.party,
+        isAdmin: decodedAccessToken.isAdmin,
       }),
     });
 

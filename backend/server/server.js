@@ -7,8 +7,9 @@ const registerRoute = require('./routes/userSignUp')
 const getUserByIdRoute = require('./routes/userGetUserById')
 const dbConnection = require('./config/db.config')
 const editUser = require('./routes/userEditUser')
+const deleteUser = require('./routes/userDeleteUser')
 
-const deleteUser = require('./routes/userDeleteAll')
+
 const postRoutes = require('./routes/post.createPost');
 const deletePost = require('./routes/post.deletePost');
 const getAllPosts = require('./routes/post.getAllPosts')

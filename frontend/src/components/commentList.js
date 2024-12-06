@@ -12,10 +12,14 @@ const CommentList = () => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const userInfo = getUserInfo(); // Decode the JWT
     setUser(userInfo); // Set user info from decoded JWT
+    if (userInfo && userInfo.isAdmin) {
+      setIsAdmin(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -55,7 +59,7 @@ const CommentList = () => {
 
   return (
     <div className="flex h-screen bg-[#301952] text-white">
-      <div className="flex-grow flex flex-col items-center overflow-y-auto"> {/* Main content */}
+      <div className="flex-grow flex flex-col items-center overflow-y-auto">
         {post && (
           <div className="w-3/4 max-w-4xl flex flex-col items-center bg-white rounded-lg shadow-lg p-6 mb-10 mt-8 text-center">
             <h2 className="text-xl font-bold text-[#301952]">{post.username}</h2>
@@ -81,8 +85,9 @@ const CommentList = () => {
                 <p className="text-[#301952]">{comment.commentContent}</p>
 
                 {/* Edit and Delete buttons */}
-                {comment.userId === user.id && (
+                {comment.userId === user.id || isAdmin ? (
                   <div className="flex justify-center space-x-4 mt-4">
+                    {comment.userId === user.id && ( 
                     <EditComment
                       commentId={comment._id}
                       commentUserId={comment.userId}
@@ -90,14 +95,16 @@ const CommentList = () => {
                       initialContent={comment.commentContent}
                       onEdit={handleCommentEdited}
                     />
+                    )}
                     <DeleteComment
                       commentId={comment._id}
                       commentUserId={comment.userId}
                       currentUserId={user.id}
+                      isAdmin={isAdmin}
                       onDelete={() => handleCommentDeleted(comment._id)}
                     />
                   </div>
-                )}
+                ) : null}
               </div>
             ))
           )}
