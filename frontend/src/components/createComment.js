@@ -7,6 +7,8 @@ const CreateComment = ({ postId }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    
+
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {

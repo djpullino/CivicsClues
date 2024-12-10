@@ -2,17 +2,28 @@ import React from "react";
 import axios from "axios";
 
 const EditPostButton = ({ postId, initialContent, username, onUpdate }) => { // Use `username` instead of `userId`
+  
+  console.log("Backend URI:", process.env.REACT_APP_BACKEND_SERVER_URI);
+
+
   const handleEdit = async () => {
     const newContent = window.prompt("Edit your post:", initialContent);
 
     if (newContent && newContent !== initialContent) {
       try {
         console.log("Sending edit request with:", { postId, content: newContent, username });
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/posts/editPost`, {
-          postId,
-          content: newContent, 
-          username, // Use `username` in the request
-        }); 
+        console.log("Request URL:", `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/editPost`);
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/editPost`, 
+          {
+            postId,
+            content: newContent,
+            username, // Use `username` in the request
+          }
+        );
+        
+        console.log(response);
+        
 
         console.log("Edit response:", response.data);
 
