@@ -36,7 +36,7 @@ const DeletePost = ({ postId, postUserId, currentUserId, isAdmin, onDelete }) =>
     <div>
       {/* Delete button */}
       <button 
-        className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#431c6b]" 
+        className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#5B3B8C]" 
         onClick={handleDelete}
       >
         Delete Post

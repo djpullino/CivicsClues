@@ -8,6 +8,7 @@ const getUserByIdRoute = require('./routes/userGetUserById')
 const dbConnection = require('./config/db.config')
 const editUser = require('./routes/userEditUser')
 const deleteUser = require('./routes/userDeleteUser')
+const promoteUser = require('./routes/promoteUser')
 
 
 const postRoutes = require('./routes/post.createPost');
@@ -36,6 +37,7 @@ app.use('/user', getAllUsersRoute);
 app.use('/user', getUserByIdRoute);
 app.use('/user', editUser);
 app.use('/user', deleteUser);
+app.use('/user', promoteUser);
 app.use('/comments', createComment);   
 
 app.listen(SERVER_PORT, (req, res) => {

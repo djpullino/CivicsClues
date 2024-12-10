@@ -7,9 +7,9 @@ const Post = ({ post }) => {
   return (
     <div className="mb-4 p-4 text-[#301952] max-w-lg">
       <div className="flex justify-between items-center mb-2">
-        <a href={`/profile/${post.username}`} className="text-lg font-semibold text-[#301952] ">
+       <div className="text-lg font-semibold text-[#301952]">
           @{post.username} - Currently {post.party}
-        </a>
+        </div>
         
       </div>
       <span className="text-sm text-gray-600">{formattedDate}</span>

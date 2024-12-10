@@ -125,7 +125,7 @@ const HomePage = () => {
                                 
                                 {/* Comment section */}
                                 <div>
-                                    <Link to={`/commentList/${post._id}`} className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#431c6b] no-underline">
+                                    <Link to={`/commentList/${post._id}`} className="px-4 py-2 bg-[#301952] text-white rounded hover:bg-[#5B3B8C] no-underline">
                                         View Comments
                                     </Link>
                                 </div>

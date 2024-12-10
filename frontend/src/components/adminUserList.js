@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import getUserInfo from '../utilities/decodeJwt';
 import DeleteUserButton from './deleteUser';  // Import the DeleteUserButton component
+import ManageUserRoleButton from './manageUser'; // Import the ManageUserRoleButton component
 
 const AdminUserList = () => {
   const [users, setUsers] = useState([]);
@@ -41,6 +42,15 @@ const AdminUserList = () => {
     setUsers(users.filter(user => user._id !== userId));  // Remove the deleted user from the state
   };
 
+  const handleUpdateUserRole = (userId, action) => {
+    // Handle the update of user roles (promote or demote)
+    setUsers(users.map(user =>
+      user._id === userId
+        ? { ...user, isAdmin: action === 'promote' ? true : false }
+        : user
+    ));
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -64,10 +74,19 @@ const AdminUserList = () => {
           {users.map((user) => (
             <tr key={user._id}>
               <td className="border border-gray-300 p-2">{user.username}</td>
-              <td className="border border-gray-300 p-2">{user.email}</td>
+              <td className="border border-gray-300 p-2">
+                <a href={`mailto:${user.email}`} className="text-blue-500 hover:underline">
+                  {user.email}
+                </a>
+              </td>
               {isAdmin && (
                 <td className="border border-gray-300 p-2">
                   <DeleteUserButton userId={user._id} onDelete={handleDeleteUser} />
+                  {/* Add the Promote/Demote buttons */}
+                  <ManageUserRoleButton 
+                    userId={user._id} 
+                    onUpdate={handleUpdateUserRole} 
+                  />
                 </td>
               )}
             </tr>
