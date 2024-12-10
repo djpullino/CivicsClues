@@ -19,7 +19,7 @@ const EditComment = ({ commentId, commentUserId, currentUserId, initialContent, 
 
     try {
       // Send PUT request and receive the updated comment
-      const response = await axios.put(`http://localhost:8081/comments/comment/update/${commentId}`, {
+      const response = await axios.put(`${process.env.REACT_APP_BACKEND_URI}/comments/comment/update/${commentId}`, {
         commentContent: newContent,
       });
 

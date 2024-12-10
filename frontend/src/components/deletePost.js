@@ -17,7 +17,7 @@ const DeletePost = ({ postId, postUserId, currentUserId, isAdmin, onDelete }) =>
   
     try {
       // Send DELETE request
-      await axios.delete('http://localhost:8081/posts/deletePost', {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
         data: { postId, username: currentUserId } // Explicitly include the payload here
       });

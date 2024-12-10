@@ -8,11 +8,11 @@ const EditPostButton = ({ postId, initialContent, username, onUpdate }) => { // 
     if (newContent && newContent !== initialContent) {
       try {
         console.log("Sending edit request with:", { postId, content: newContent, username });
-        const response = await axios.post("http://localhost:8081/posts/editPost", {
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/posts/editPost`, {
           postId,
-          content: newContent,
+          content: newContent, 
           username, // Use `username` in the request
-        });
+        }); 
 
         console.log("Edit response:", response.data);
 
