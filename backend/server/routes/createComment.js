@@ -101,7 +101,7 @@ commentRoutes.delete("/comment/:id", async (req, res) => {
       return res.status(404).json({ error: "Comment not found." });
     }
 
-    if (isAdmin || comment.userId === currentUser) {
+    if (isAdmin || comment.username === currentUser) {
       await comment.remove();
       return res.json({ msg: "Comment deleted successfully." });
     }
